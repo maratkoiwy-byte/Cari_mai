@@ -120,6 +120,15 @@ export function CartDrawer({
           items: items.map((i) => ({ productId: i.product.id, quantity: i.quantity })),
         }),
       });
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        setError(
+          lang === 'kk'
+            ? 'Сервер API қосылмаған. WhatsApp арқылы тапсырыс беріңіз.'
+            : 'Сервер API не подключён. Оформите заказ через WhatsApp или подключите деплой с функциями.',
+        );
+        return;
+      }
       const data = await res.json();
       if (!res.ok) {
         setError(data.error || 'Error submitting order');

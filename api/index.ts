@@ -8,10 +8,13 @@ import type { Order, OrderStatus, Product, StoreSettings } from '../src/types';
 
 dotenv.config();
 
-const IS_VERCEL = process.env.VERCEL === '1';
+const IS_SERVERLESS =
+  process.env.VERCEL === '1' ||
+  process.env.NETLIFY === 'true' ||
+  Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
 const BUNDLED_DATA_DIR = path.join(process.cwd(), 'data');
 const BUNDLED_STORE_FILE = path.join(BUNDLED_DATA_DIR, 'store.json');
-const RUNTIME_STORE_FILE = IS_VERCEL ? '/tmp/qainar-store.json' : BUNDLED_STORE_FILE;
+const RUNTIME_STORE_FILE = IS_SERVERLESS ? '/tmp/qainar-store.json' : BUNDLED_STORE_FILE;
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'Marat';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '7777';
@@ -47,45 +50,23 @@ const DEFAULT_SETTINGS: StoreSettings = {
 
 const SEED_PRODUCTS: Product[] = [
   {
-    id: 'sary-mai-500g',
-    name: 'Қолдың таза сары майы',
-    nameRu: 'Домашнее чистое топлёное масло (Сары май)',
-    category: 'butter',
-    price: 2800,
-    unit: '500 г',
-    shortDescription: 'Қоспасыз, табиғи сиыр сүтінің қаймағынан шайқалған таза сары май. Қолжетімді бағада.',
-    shortDescriptionRu: '100% натуральное домашнее масло из свежих сливок без добавок и пальмового масла.',
-    description:
-      'Ауылдың таза сиыр сүтінен дәстүрлі әдіспен дайындалған табиғи сары май. Құрамында ешқандай өсімдік майы, бояғыш немесе консервант жоқ. Таңғы асқа, бауырсақ пен ботқаға, шайға және балалар тағамына өте пайдалы.',
-    descriptionRu:
-      'Натуральное масло, приготовленное по традиционному рецепту из цельных деревенских сливок. Без растительных жиров и консервантов. Идеально для завтраков, каш, выпечки и традиционного чаепития.',
-    ingredients: '100% табиғи сиыр сүтінің кілегейі (майлылығы 82,5% – 99% тазартылған)',
-    ingredientsRu: '100% натуральные сливки коровьего молока',
-    usage: 'Салқын жерде (+2°C – +6°C) сақтаңыз. Таңғы асқа, тағам дайындауға тікелей қолдануға болады.',
-    usageRu: 'Хранить в прохладном месте при температуре +2°C – +6°C.',
-    imageUrl: '/src/assets/images/product_sary_mai_jar_1794738803072.jpg',
-    inStock: true,
-    featured: true,
-    createdAt: '2026-11-01T08:00:00.000Z',
-  },
-  {
     id: 'sary-mai-1kg',
     name: 'Таза сары май — Отбасылық',
     nameRu: 'Чистое Сары май — Семейная банка',
     category: 'butter',
-    price: 5200,
+    price: 7500,
     unit: '1 кг',
     shortDescription: 'Үлкен отбасыға арналған үнемді 1 кг қаптама. Апта сайын жаңа партия келеді.',
     shortDescriptionRu: 'Выгодный семейный объём 1 кг. Свежая партия каждую неделю напрямую без посредников.',
     description:
       'Делдалсыз тікелей өндірушіден жеткізілетін 1 келілік таза сары май. Хош иісті, алтын түстес, дәрумендерге (A, D, E, K) бай табиғи өнім. Жақын жерлерге жылдам жеткіземіз.',
     descriptionRu:
-      'Свежее домашнее сары май напрямую от производителя по доступной цене. Богатый сливочный аромат, золотистый цвет, источник натуральных жирораствомых витаминов A, D, E, K.',
+      'Свежее домашнее сары май напрямую от производителя по доступной цене. Богатый сливочный аромат, золотистый цвет, источник натуральных жирорастворимых витаминов A, D, E, K.',
     ingredients: '100% табиғи тазартылған сүт майы',
     ingredientsRu: '100% натуральный молочный жир',
     usage: 'Қуыруға, пісіруге және күнделікті тағамға қолдануға жарамды.',
     usageRu: 'Подходит для жарки, выпечки и ежедневного употребления.',
-    imageUrl: '/src/assets/images/product_sary_mai_jar_1794738803072.jpg',
+    imageUrl: '/src/assets/images/custom_sary-mai-1kg.jpg',
     inStock: true,
     featured: true,
     createdAt: '2026-11-01T08:05:00.000Z',
@@ -107,7 +88,7 @@ const SEED_PRODUCTS: Product[] = [
     ingredientsRu: 'Концентрат Pavlov Spring (189 трав, водоросли, женьшень), коэнзим Q-10, ресвератрол, ксантоны, натуральные соки цитрусовых, пчелиное маточное молочко.',
     usage: 'Күніне 1 рет таңертең аш қарынға 0,5 шай қасықтан (немесе тамшылап бастап) жылы сумен ішіледі. Дәрілік зат болып табылмайды (ББҚ).',
     usageRu: 'Принимать утром натощак с минимальной дозировки (от нескольких капель до 0,5 чайной ложки), запивая водой. Не является лекарственным средством.',
-    imageUrl: '/src/assets/images/product_perfecto_lux_1794738805329.jpg',
+    imageUrl: '/src/assets/images/custom_perfecto-lux.jpg',
     inStock: true,
     featured: true,
     createdAt: '2026-11-01T08:10:00.000Z',
@@ -129,7 +110,7 @@ const SEED_PRODUCTS: Product[] = [
     ingredientsRu: 'Концентрат Pavlov Spring (189 растений), сок граната и мангостина, коэнзим Q-10, ресвератрол, витамины и 250 макро- и микроэлементов.',
     usage: 'Perfecto Lux ішкеннен кейін 10–15 минут өткен соң немесе күндіз 0,5 шай қасықтан сумен қабылданады. Қолданар алдында маманмен кеңесу ұсынылады.',
     usageRu: 'Принимать через 10–15 минут после Perfecto Lux (от нескольких капель до 0,5 ч.л. в день), запивая водой.',
-    imageUrl: '/src/assets/images/product_vitality_lux_1794738804995.jpg',
+    imageUrl: '/src/assets/images/custom_vitality-lux.jpg',
     inStock: true,
     featured: true,
     createdAt: '2026-11-01T08:15:00.000Z',
@@ -146,12 +127,12 @@ const SEED_PRODUCTS: Product[] = [
     description:
       'Ең танымал базалық курс: Perfecto Lux ағзаны тазартуға, ал Vitality Lux жасушаларды қоректендіру мен иммунитетті күшейтуге бағытталған. Бірге алғанда бағасы тиімдірек.',
     descriptionRu:
-      'Классический дуэт Global Trend Company: Perfecto Lux отвечает за очищение и микроциркуцию, а Vitality Lux — за восполнение энергии и защиту иммунитета. Выгоднее при покупке комплектом.',
+      'Классический дуэт Global Trend Company: Perfecto Lux отвечает за очищение и микроциркуляцию, а Vitality Lux — за восполнение энергии и защиту иммунитета. Выгоднее при покупке комплектом.',
     ingredients: 'Perfecto Lux (100 мл) + Vitality Lux (100 мл) — 189 өсімдік сығындысы, Q-10, ресвератрол, цитрус, гранат және мангостин шырындары.',
     ingredientsRu: 'Perfecto Lux (100 мл) + Vitality Lux (100 мл) на базе концентрата Pavlov Spring.',
     usage: 'Күн сайын кезекпен (арасы 10–15 минут) аз мөлшерден бастап сумен ішу ұсынылады.',
     usageRu: 'Принимать поочерёдно с интервалом 10–15 минут, начиная с минимальных доз.',
-    imageUrl: '/src/assets/images/product_perfecto_lux_1794738805329.jpg',
+    imageUrl: '/src/assets/images/custom_base-pair-set.jpg',
     inStock: true,
     featured: true,
     createdAt: '2026-11-01T08:20:00.000Z',
@@ -290,7 +271,7 @@ async function writeStore(data: StoreData): Promise<void> {
     }
     fs.writeFileSync(RUNTIME_STORE_FILE, JSON.stringify(data, null, 2), 'utf8');
   } catch (err) {
-    if (!IS_VERCEL) {
+    if (!IS_SERVERLESS) {
       console.error('Failed to write store file:', err);
     }
   }

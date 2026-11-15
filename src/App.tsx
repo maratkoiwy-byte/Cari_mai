@@ -6,27 +6,17 @@ import { Header } from './components/Header';
 import { ProductImage } from './components/ProductImage';
 import { ProductModal } from './components/ProductModal';
 import { HERO_BANNER_SRC } from './lib/images';
+import { INITIAL_PRODUCTS, INITIAL_SETTINGS } from './lib/initialCatalog';
 import type { CartItem, Language, Product, StoreSettings } from './types';
-
-const DEFAULT_SETTINGS: StoreSettings = {
-  deliveryNote:
-    'Орал қаласы және жақын аудандарға тапсырыс берген күні 1–3 сағат ішінде жеткіземіз. 15 000 ₸-ден жоғары тапсырысқа жеткізу тегін.',
-  deliveryNoteRu:
-    'Быстрая доставка по г. Уральск и ближайшим районам в день заказа за 1–3 часа. Бесплатная доставка при заказе от 15 000 ₸.',
-  freeDeliveryThreshold: 15000,
-  contactPhone: '+7 (747) 365-75-10',
-  storeAddress: 'Батыс Қазақстан облысы, Орал қаласы',
-  storeAddressRu: 'Западно-Казахстанская область, г. Уральск',
-};
 
 const ADMIN_TOKEN_KEY = 'qainar_admin_token';
 
 export default function App() {
   const [lang, setLang] = useState<Language>('kk');
   const [view, setView] = useState<'store' | 'admin'>('store');
-  const [products, setProducts] = useState<Product[]>([]);
-  const [settings, setSettings] = useState<StoreSettings>(DEFAULT_SETTINGS);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [settings, setSettings] = useState<StoreSettings>(INITIAL_SETTINGS);
+  const [loading, setLoading] = useState(false);
 
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'butter' | 'balm'>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -47,16 +37,23 @@ export default function App() {
   const fetchStoreData = useCallback(async () => {
     try {
       const [prodRes, setRes] = await Promise.all([fetch('/api/products'), fetch('/api/settings')]);
-      const prodData = await prodRes.json();
-      const setData = await setRes.json();
-      if (Array.isArray(prodData?.products)) {
-        setProducts(prodData.products);
+      const prodType = prodRes.headers.get('content-type') || '';
+      const setType = setRes.headers.get('content-type') || '';
+
+      if (prodRes.ok && prodType.includes('application/json')) {
+        const prodData = await prodRes.json();
+        if (Array.isArray(prodData?.products) && prodData.products.length > 0) {
+          setProducts(prodData.products);
+        }
       }
-      if (setData?.settings) {
-        setSettings(setData.settings);
+      if (setRes.ok && setType.includes('application/json')) {
+        const setData = await setRes.json();
+        if (setData?.settings) {
+          setSettings(setData.settings);
+        }
       }
     } catch {
-      // Keep graceful empty state if offline
+      // Keep bundled INITIAL_PRODUCTS & INITIAL_SETTINGS on static or offline hosts
     } finally {
       setLoading(false);
     }
@@ -515,9 +512,15 @@ export default function App() {
                             {title}
                           </h3>
 
-                          <p className="text-xs text-[#52524C] leading-relaxed line-clamp-2">
+                          <p className="text-xs text-[#52524C] leading-relaxed">
                             {shortDesc}
                           </p>
+                          {(lang === 'ru' && product.descriptionRu ? product.descriptionRu : product.description) !==
+                            shortDesc && (
+                            <p className="text-xs text-[#6B6B63] leading-relaxed line-clamp-3">
+                              {lang === 'ru' && product.descriptionRu ? product.descriptionRu : product.description}
+                            </p>
+                          )}
                         </div>
 
                         <div className="pt-3 border-t border-[#F0EDE5] flex items-center justify-between gap-3">

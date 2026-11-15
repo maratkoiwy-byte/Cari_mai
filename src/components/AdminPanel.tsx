@@ -161,6 +161,15 @@ export function AdminPanel({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        setLoginError(
+          lang === 'kk'
+            ? 'API сервері іске қосылмаған.'
+            : 'API-сервер не запущен на этом хостинге.',
+        );
+        return;
+      }
       const data = await res.json();
       if (!res.ok || !data.token) {
         setLoginError(lang === 'kk' ? 'Логин немесе құпия сөз қате.' : 'Неверный логин или пароль.');

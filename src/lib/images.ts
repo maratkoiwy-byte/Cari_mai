@@ -3,6 +3,10 @@ import saryMaiJarImg from '../assets/images/product_sary_mai_jar_1794738803072.j
 import perfectoLuxImg from '../assets/images/product_perfecto_lux_1794738805329.jpg';
 import vitalityLuxImg from '../assets/images/product_vitality_lux_1794738804995.jpg';
 import smartLuxPavlovImg from '../assets/images/product_smart_lux_pavlov_1794738805271.jpg';
+import customSaryMai1KgImg from '../assets/images/custom_sary-mai-1kg.jpg';
+import customPerfectoLuxImg from '../assets/images/custom_perfecto-lux.jpg';
+import customVitalityLuxImg from '../assets/images/custom_vitality-lux.jpg';
+import customBasePairSetImg from '../assets/images/custom_base-pair-set.jpg';
 
 const IMAGE_MAP: Record<string, string> = {
   '/src/assets/images/regenerated_image_1794730584122.webp': heroBannerImg,
@@ -11,11 +15,21 @@ const IMAGE_MAP: Record<string, string> = {
   '/src/assets/images/product_perfecto_lux_1794738805329.jpg': perfectoLuxImg,
   '/src/assets/images/product_vitality_lux_1794738804995.jpg': vitalityLuxImg,
   '/src/assets/images/product_smart_lux_pavlov_1794738805271.jpg': smartLuxPavlovImg,
+  '/src/assets/images/custom_sary-mai-1kg.jpg': customSaryMai1KgImg,
+  '/src/assets/images/custom_perfecto-lux.jpg': customPerfectoLuxImg,
+  '/src/assets/images/custom_vitality-lux.jpg': customVitalityLuxImg,
+  '/src/assets/images/custom_base-pair-set.jpg': customBasePairSetImg,
 };
 
 export const HERO_BANNER_SRC = heroBannerImg;
 
 export const PRESET_IMAGES = [
+  {
+    labelKk: 'Таза сары май (1 кг)',
+    labelRu: 'Чистое сары май (1 кг)',
+    path: '/src/assets/images/custom_sary-mai-1kg.jpg',
+    preview: customSaryMai1KgImg,
+  },
   {
     labelKk: 'Таза сары май (әйнек ыдыс)',
     labelRu: 'Чистое сары май (банка)',
@@ -25,14 +39,20 @@ export const PRESET_IMAGES = [
   {
     labelKk: 'Perfecto Lux (бальзам)',
     labelRu: 'Perfecto Lux (бальзам)',
-    path: '/src/assets/images/product_perfecto_lux_1794738805329.jpg',
-    preview: perfectoLuxImg,
+    path: '/src/assets/images/custom_perfecto-lux.jpg',
+    preview: customPerfectoLuxImg,
   },
   {
     labelKk: 'Vitality Lux (бальзам)',
     labelRu: 'Vitality Lux (бальзам)',
-    path: '/src/assets/images/product_vitality_lux_1794738804995.jpg',
-    preview: vitalityLuxImg,
+    path: '/src/assets/images/custom_vitality-lux.jpg',
+    preview: customVitalityLuxImg,
+  },
+  {
+    labelKk: 'Базалық жиынтық',
+    labelRu: 'Базовый набор',
+    path: '/src/assets/images/custom_base-pair-set.jpg',
+    preview: customBasePairSetImg,
   },
   {
     labelKk: 'Smart Lux / Pavlov Spring',
