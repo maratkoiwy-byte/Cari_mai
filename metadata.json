@@ -1,0 +1,6 @@
+{
+  "name": "Қайнар — Таза Сары Май және Нано Бальзам Дүкені",
+  "description": "Таза табиғи сары май және Global Trend Company нано бальзамдарының онлайн дүкені. Қолжетімді баға және жақын жерлерге жылдам жеткізу.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
